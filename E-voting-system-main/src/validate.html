@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Voting</title>
+    <style>
+        body {
+            font-family: "Raleway", sans-serif;
+            background: linear-gradient(to right, orange, #00FF6C);
+        }
+        
+        form {
+            width: 70%;
+            margin: auto;
+        }
+        
+        h1 {
+            text-align: center;
+            margin: 20px auto;
+            background: linear-gradient(to right, green, blue);
+            color: whitesmoke;
+        }
+        
+        input[type="text"],
+        input[type="date"] {
+            width: 300px;
+            height: 20px;
+            padding: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            width: 20%;
+            text-align: center;
+            margin-top: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(to right, green, blue);
+            color: whitesmoke;
+        }
+    </style>
+    <link rel="shortcut icon" href="img/favicon.svg" type="image/x-icon">
+
+    <link href="css/landing.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Arimo&display=swap" rel="stylesheet">
+    <header>
+        <div id="navbar-custom"></div>
+    </header>
+</head>
+
+<body>
+    <h1>Welcome to E-Voting System</h1>
+    <div id="error"></div>
+    <form id="form" action="/blockvote-card.html" method="GET">
+        <div>
+            <label for="name"> <b>Name</b> </label>
+            <input id="name" name="name" type="text" required>
+        </div>
+
+        <div>
+            <label for="aadhar"> <b>Aadhar No.</b> </label>
+            <input id="aadhar" name="aadhar" type="text" required>
+        </div>
+        <div>
+            <label for="pan"> <b>PAN ID</b> </label>
+            <input id="pan" name="pan" type="text" required>
+        </div>
+        <div>
+            <label for="voter"> <b>VOTER ID</b> </label>
+            <input id="voter" name="voter" type="text" required>
+        </div>
+        <div>
+            <b>Date of Birth: <input type=date id = DOB required> </b>
+        </div>
+        <button type="submit" class="btn btn-primary btn-success center-block">Submit</button>
+    </form>
+</body>
+<script src="js/navbar.js"></script>
+<script>
+    const name = document.getElementById('name')
+    const form = document.getElementById('form')
+    const errorElement = document.getElementById('error')
+    const adhar = document.getElementById('aadhar');
+    const adharcheck = /^[0-9]{4}[ -]?[0-9]{4}[ -]?[0-9]{4}$/;
+    const pan = document.getElementById('pan')
+    const pancheck = /[A-Z]{5}[0-9]{4}[A-Z]{1}/;
+    const voter = document.getElementById('voter')
+    const votercheck = /^([a-zA-Z]){3}([0-9]){7}?$/;
+    form.addEventListener('submit', (e) => {
+        let messages = []
+        if (name.value === '' || name.value == null) {
+            messages.push('Name is required')
+        }
+        if (!adharcheck.test(adhar.value)) {
+            messages.push("Aadhar No. Incorrect");
+        }
+        if (!pancheck.test(pan.value)) {
+            messages.push("PAN ID Incorrect");
+        }
+        if (!votercheck.test(voter.value)) {
+            messages.push("Voter ID Incorrect");
+        }
+        var userinput = document.getElementById("DOB").value;
+        var dob = new Date(userinput);
+        var month_diff = Date.now() - dob.getTime();
+        var age_dt = new Date(month_diff);
+        var year = age_dt.getUTCFullYear();
+        var age = Math.abs(year - 1970);
+        if (age < 18) {
+            messages.push("Not Eligible for voting");
+        }
+        if (messages.length > 0) {
+            e.preventDefault()
+            errorElement.innerText = messages.join(', ')
+        }
+    })
+</script>
+
+</html>
